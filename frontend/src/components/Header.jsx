@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import SearchBox from './SearchBox.jsx';
 import { logout } from '../slices/authSlice.js';
+import { resetCart } from '../slices/cartSlice.js';
+import logo from '../assets/logo.png';
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -17,11 +19,12 @@ const Header = () => {
   const [logoutApiCall] = useLogoutMutation();
   const logoutHandler = async () => {
     try{
-        await logoutApiCall().unwrap;
+        await logoutApiCall().unwrap();
         dispatch(logout());
+        dispatch(resetCart());
         navigate('/login');
     } catch (err) {
-
+        console.error(err);
     }
 
   };
@@ -31,7 +34,10 @@ const Header = () => {
         <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
             <Container>
                 <LinkContainer to='/'>
-                    <Navbar.Brand>ProShop</Navbar.Brand>
+                    <Navbar.Brand>
+                        <img src={logo} alt='ProShop' />
+                        ProShop
+                    </Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

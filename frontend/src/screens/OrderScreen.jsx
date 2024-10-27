@@ -45,7 +45,7 @@ const OrderScreen = () => {
     function onApprove(data, actions) {
         return actions.order.capture().then(async function(details) {
             try {
-                await payOrder({orderId, details });
+                await payOrder({orderId, details }).unwrap();
                 refetch();
                 toast.success('payment successful');
             } catch (err) {
@@ -85,7 +85,7 @@ const OrderScreen = () => {
         }
     }
 
-    return isLoading ? <Loader /> : isError ? <Message vaiant="danger" /> 
+    return isLoading ? <Loader /> : isError ? <Message variant="danger">{isError?.data?.message || isError.error}</Message> 
     :(
         <>
             <h1>Order {order._id}</h1>
